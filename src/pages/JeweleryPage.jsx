@@ -2,33 +2,20 @@ import { Component } from 'react'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Loading from '../components/Loading';
-import Empty from '../components/Empty';
 
-// import arrowRight from "../assets/icon-next.svg"
-// import arrowLeft from "../assets/icon-previous.svg"
-// import { LIMIT } from '../constants';
-
-export class HomePage extends Component {
+export class JeweleryPage extends Component {
     state = {
         products: [],
-        loading: false,
-        search: '',
-        // total: 0,
-        // activePage: 1
+        loading: false
     }
 
     async getProducts() {
-
         try {
             this.setState({ loading: true })
-            const params = {
-                // page: activePage,
-                // limit: LIMIT
-            }
-            const { data: allProducts } = await axios('https://fakestoreapi.com/products')
-            const { data: products } = await axios('https://fakestoreapi.com/products', { params })
+            const params = {}
+            const allProducts = await axios('https://fakestoreapi.com/products/category/jewelery', { params })
 
-            this.setState({ products, total: allProducts.length })
+            this.setState({ products: allProducts.data })
         } catch (err) {
             console.log(err)
         } finally {
@@ -41,26 +28,13 @@ export class HomePage extends Component {
     }
 
     render() {
-        const { products, loading, search, cart } = this.state;
-        const { addToCart } = this.props
-
-        let filteredProducts = products.filter((product) => {
-            return product.title.toLowerCase().includes(search.toLowerCase());
-        });
-
-        const handleValue = (e) => {
-            this.setState({ search: e.target.value });
-        };
-
-
-
+        const { products, loading } = this.state
         return (
             <div className='max-w-7xl mx-auto px-5'>
-                <input value={search} onChange={handleValue} type="text" placeholder="Searching..." className="input input-bordered w-full my-5" />
-                <h1 className='text-3xl'>All Products ({filteredProducts.length})</h1>
+                <h1 className='text-3xl mt-4'>Jewelery Products ({products.length})</h1>
                 <div className='flex flex-wrap gap-4 justify-evenly my-5'>
                     {
-                        loading ? <Loading /> : filteredProducts.length ? filteredProducts.map((product) => {
+                        loading ? <Loading /> : products.map((product) => {
                             return (
                                 <div key={product.id} className="border shadow-xl w-[296px] mb-6 transition-all hover:shadow-2xl rounded-lg own-card overflow-hidden pt-3">
                                     <div className='relative '>
@@ -75,22 +49,18 @@ export class HomePage extends Component {
                                             <p className='text-[#ffffff] flex gap-1 px-2 py-1 text-[14px] rounded-lg bg-blue-500 border'>Rating <span>{product.rating.rate}</span></p>
                                             <p className='text-[#ffffff] flex gap-1 px-2 py-1 text-[14px] rounded-lg bg-green-500 border'>Count <span>{product.rating.count}</span></p>
                                         </div>
-                                        <div className='flex gap-2'>
-                                            <Link to={`/product-page/${product.id}`} className="btn w-1/2 mt-4 btn-outline  btn-secondary">Read more </Link>
-                                            <button onClick={() => addToCart(product.id)} to={`/product-page/${product.id}`} className="btn w-1/2 mt-4 btn-primary">Add to Cart</button>
-                                        </div>
+                                        <Link to={`/product-page/${product.id}`} className="btn w-full mt-4 btn-outline btn-secondary">Read more about product</Link>
                                     </div>
                                 </div>
-                            );
-                        }) : <Empty />
+                            )
+                        })
                     }
                 </div>
             </div>
-        );
+        )
     }
-
 }
 
-export default HomePage
+export default JeweleryPage
 
 

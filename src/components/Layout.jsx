@@ -1,13 +1,14 @@
 import { Component, Fragment } from 'react'
-import Header from './Header'
 import Footer from './Footer'
 import { Outlet } from 'react-router-dom'
+import Navbar from './Navbar'
 
 export class Layout extends Component {
     render() {
+        const { cart } = this.props
         return (
             <Fragment>
-                <Header />
+                <Navbar cart={cart} />
                 <main>
                     <Outlet />
                 </main>

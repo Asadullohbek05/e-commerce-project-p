@@ -9,5 +9,18 @@
 }
 
 .active {
-  color: #0e032b;
+  color: rgb(19, 1, 1);
+}
+
+.paginationActive {
+  background-color: blue;
+  color: white;
+}
+
+.own-card img {
+  transition: all 0.5s;
+}
+
+.own-card:hover img {
+  transform: scale(1.05);
 }
